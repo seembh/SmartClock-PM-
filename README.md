@@ -11,4 +11,6 @@
   Another thing I added was a buzzer that uses a potentiometer to control the volume. Because of the high current draw of the LED matrix, there is an always on buzz when the LED is set to maximum intensity so I implemented a Night Mode. Another thing is that a 10K potentiometer is way too much for a piezo buzzer (1K should do the trick).
   I wanted to add a switch to turn both sensors off just to prevent accidental triggering so I used the second button. 
   The code could be optimised by using AVR code instead of digitalReads/Writes for speed and memory. 
-https://ocw.cs.pub.ro/courses/pm/prj2021/dbrigalda/502
+  
+  ## Original link
+  https://ocw.cs.pub.ro/courses/pm/prj2021/dbrigalda/502
