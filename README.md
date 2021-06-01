@@ -3,11 +3,11 @@
 
 https://ocw.cs.pub.ro/courses/pm/prj2021/dbrigalda/502
 
-Introduction:
-  [Motivation]
+##Introduction:
+###Motivation
   The project started out as a normal digital clock that was neither accurate nor smart. 
   
-  [Steps:]
+###Steps:
   I started by adding an RTC module and an LCD display (both using I2C) and an LED matrix which was helpful in figuring the "clock" part out. The RTC module works by using a battery to store (for an year) the date ( day / month / year) and the time ( hour / minute / second). This was implemented using the DHT11 library. The LCD was implemented using the LiquidCrystal_I2C library and it works well with another I2C device (the RTC module). For the LED matrix I used 2 libraries but it can be done with only one (MD_Parola and MD_MAX72XX). 
   The sensors I used were a distance sensor which I setup to detect a distance less than 6 cm and the PIR which I setup on a medium sensitivity (3.5m roughly) and 10 seconds delay.
   The PIR sensor uses interrupts to send a state to the Arduino.
