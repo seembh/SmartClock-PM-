@@ -13,16 +13,16 @@
 #include <ds3231.h>
  
 #define DHT11PIN A0
-#define echoPin 4
-#define trigPin 5
-#define whiteLedPin A2
-#define blueLedPin A3
-#define upPin 6
-#define downPin 7
-#define menuPin 8
-#define buzzerPin A1
-#define maxOptions 6
-#define interrupt_pin 2
+#define ECHO_PIN 4
+#define TRIG_PIN 5
+#define WHITE_LED_PIN A2
+#define BLUE_LED_PIN A3
+#define UP_PIN 6
+#define DOWN_PIN 7
+#define MENU_PIN 8
+#define BUZZER_PIN A1
+#define MAX_OPTIONS 6
+#define INTERRUPT_PIN 2
  
 #define HARDWARE_TYPE MD_MAX72XX::FC16_HW
 #define MAX_DEVICES 4
@@ -32,7 +32,6 @@
 #define  DELAYTIME  40  // in milliseconds
 #define SPEED_TIME  50
 #define PAUSE_TIME  1000
- 
  
 // Create a new instance of the MD_MAX72XX class:
 MD_Parola myDisplay = MD_Parola(HARDWARE_TYPE, CS_PIN, MAX_DEVICES);
@@ -58,28 +57,25 @@ bool nightLights = 0;
 bool noSensors = 0; 
 struct ts t; 
 
- 
 void setup()
 {
   Wire.begin();
   pinMode(DHT11PIN,INPUT);
-  pinMode(upPin, INPUT_PULLUP);
-  pinMode(downPin, INPUT_PULLUP);
-  pinMode(menuPin, INPUT_PULLUP);
-  pinMode(trigPin, OUTPUT); // Sets the trigPin as an OUTPUT
-  pinMode(echoPin, INPUT); // Sets the echoPin as an INPUT
-  pinMode(whiteLedPin,OUTPUT);
-  pinMode(blueLedPin,OUTPUT);
-  pinMode(buzzerPin, OUTPUT);
-  digitalWrite(blueLedPin, HIGH);
+  pinMode(UP_PIN, INPUT_PULLUP);
+  pinMode(DOWN_PIN, INPUT_PULLUP);
+  pinMode(MENU_PIN, INPUT_PULLUP);
+  pinMode(TRIG_PIN, OUTPUT); // Sets the TRIG_PIN as an OUTPUT
+  pinMode(ECHO_PIN, INPUT); // Sets the ECHO_PIN as an INPUT
+  pinMode(WHITE_LED_PIN,OUTPUT);
+  pinMode(BLUE_LED_PIN,OUTPUT);
+  pinMode(BUZZER_PIN, OUTPUT);
+  digitalWrite(BLUE_LED_PIN, HIGH);
   
-  pinMode(interrupt_pin,INPUT);
-  attachInterrupt(digitalPinToInterrupt(interrupt_pin),interrupt_routine,RISING);
+  pinMode(INTERRUPT_PIN,INPUT);
+  attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN),interrupt_routine,RISING);
   
   DS3231_init(DS3231_CONTROL_INTCN);
 
-  
-  
   mx.begin();
   
   myDisplay.begin();
@@ -93,15 +89,15 @@ void setup()
   lcd.setCursor(0,1);
   lcd.print("Inteligent!");
   
-  tone(buzzerPin, 659, 500);
+  tone(BUZZER_PIN, 659, 500);
   delay(100);
-  tone(buzzerPin, 523, 500);
+  tone(BUZZER_PIN, 523, 500);
   delay(400);
-  tone(buzzerPin, 659, 500);
+  tone(BUZZER_PIN, 659, 500);
   delay(100);
-  tone(buzzerPin, 523, 500);
+  tone(BUZZER_PIN, 523, 500);
   delay(400);
-  tone(buzzerPin, 784, 500);
+  tone(BUZZER_PIN, 784, 500);
   
   scrollText("Salut !");
   delay(2000);
@@ -115,9 +111,8 @@ void setup()
   myDisplay.displayClear();
  
   myDisplay.setTextAlignment(PA_CENTER);
-  digitalWrite(blueLedPin, LOW);
+  digitalWrite(BLUE_LED_PIN, LOW);
 }
- 
  
 void scrollText(const char *p)
 {
@@ -139,6 +134,7 @@ void scrollText(const char *p)
     }
   }
 }
+
 void bounce()
 // Animation of a bouncing ball
 {
@@ -172,6 +168,7 @@ void newHour(){
   //can be changed for hours
   if(t.sec == 0 || t.sec == 1) bounce();
 }
+
 void spiral()
 // setPoint() used to draw a spiral across the whole display
 {
@@ -217,11 +214,11 @@ void spiral()
  
 void getCurrentTemperature(){
   DHT11.read(DHT11PIN);
-  tone(buzzerPin, 523, 500);
+  tone(BUZZER_PIN, 523, 500);
   delay(300);
-  tone(buzzerPin, 659, 500);
+  tone(BUZZER_PIN, 659, 500);
   delay(300);
-  tone(buzzerPin, 784, 500);
+  tone(BUZZER_PIN, 784, 500);
   lcd.setCursor(0,0);
   lcd.print("Umiditate: ");
   lcd.print((float)DHT11.humidity, 2);
@@ -235,23 +232,23 @@ void getCurrentTemperature(){
   lcd.clear();
 
 }
+
 void getUltrasonicDistance(){
   unsigned int duration;
   unsigned short distance;
-  // Clears the trigPin condition
-  digitalWrite(trigPin, LOW);
+  // Clears the TRIG_PIN condition
+  digitalWrite(TRIG_PIN, LOW);
   delayMicroseconds(2);
-  // Sets the trigPin HIGH (ACTIVE) for 10 microseconds
-  digitalWrite(trigPin, HIGH);
+  // Sets the TRIG_PIN HIGH (ACTIVE) for 10 microseconds
+  digitalWrite(TRIG_PIN, HIGH);
   delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  // Reads the echoPin, returns the sound wave travel time in microseconds
-  duration = pulseIn(echoPin, HIGH);
+  digitalWrite(TRIG_PIN, LOW);
+  // Reads the ECHO_PIN, returns the sound wave travel time in microseconds
+  duration = pulseIn(ECHO_PIN, HIGH);
   // Calculating the distance
   distance = duration * 0.034 / 2; // Speed of sound wave divided by 2 (go and back)
     
   if (distance < 6 && distance > 0){
-
     lcd.clear();
     LedFunctionTemperatureON();
     for(unsigned char i = 0; i < 10; i++){  
@@ -260,13 +257,10 @@ void getUltrasonicDistance(){
     }
     
     getCurrentTemperature();    
-    digitalWrite(blueLedPin, HIGH);
-    digitalWrite(whiteLedPin, LOW);
-    
-
+    digitalWrite(BLUE_LED_PIN, HIGH);
+    digitalWrite(WHITE_LED_PIN, LOW);
   }
   delay(10);
-  
 }
  
 void displayClock(){
@@ -282,8 +276,8 @@ void displayClock(){
   
   myDisplay.print(timeToPrint);
 }
-void displayDate(){
-  
+
+void displayDate(){ 
   DS3231_get(&t);
   lcd.clear();
   lcd.setCursor(0,0);
@@ -292,16 +286,18 @@ void displayDate(){
   lcd.print(t.mon);
   lcd.print("/");
   lcd.print(t.year);  
-  
 }
+
 void LedFunctionClock(){
-  digitalWrite(whiteLedPin, !digitalRead(whiteLedPin));
-  digitalWrite(blueLedPin, !digitalRead(blueLedPin));
+  digitalWrite(WHITE_LED_PIN, !digitalRead(WHITE_LED_PIN));
+  digitalWrite(BLUE_LED_PIN, !digitalRead(BLUE_LED_PIN));
 }
+
 void LedFunctionTemperatureON(){
-  digitalWrite(whiteLedPin, HIGH); 
-  digitalWrite(blueLedPin, HIGH);
+  digitalWrite(WHITE_LED_PIN, HIGH); 
+  digitalWrite(BLUE_LED_PIN, HIGH);
 }
+
 void displaySetHours(){
   lcd.clear();
   lcd.setCursor(0,0);
@@ -321,6 +317,7 @@ void displaySetHours(){
   lcd.print(t.hour);
   DS3231_set(t); 
 }
+
 void displaySetMinutes(){
   lcd.clear();
   lcd.setCursor(0,0);
@@ -340,6 +337,7 @@ void displaySetMinutes(){
   lcd.print(t.min);
   DS3231_set(t); 
 }
+
 void displaySetDays(){
   lcd.clear();
   lcd.setCursor(0,0);
@@ -375,6 +373,7 @@ void displaySetDays(){
   lcd.print(t.mday);
   DS3231_set(t); 
 }
+
 void displaySetMonths(){
   lcd.clear();
   lcd.setCursor(0,0);
@@ -399,11 +398,12 @@ void displaySetYears(){
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Seteaza Anul: ");
-  if(upButton)
+  if(upButton){
     t.year++;
-  
-  if(downButton)
+  }
+  if(downButton){
      t.year--;
+  }
   lcd.setCursor(0,1);
   lcd.print(t.year);
   DS3231_set(t); 
@@ -411,9 +411,9 @@ void displaySetYears(){
  
 void buttonFunction(){  
   delay(500);
-  upButton = !digitalRead(upPin);
-  downButton = !digitalRead(downPin);
-  optionButton = !digitalRead(menuPin); 
+  upButton = !digitalRead(UP_PIN);
+  downButton = !digitalRead(DOWN_PIN);
+  optionButton = !digitalRead(MENU_PIN); 
   if(optionButton)
     option++; 
 
@@ -434,7 +434,6 @@ void buttonFunction(){
     }
   }
   
-  
   if(downButton && option == 0){
     noSensors = !noSensors;
     if(!noSensors){
@@ -451,7 +450,7 @@ void buttonFunction(){
     }
   }
   
-  if(option == maxOptions){
+  if(option == MAX_OPTIONS){
     lcd.clear();
     lcd.print("Ceasul s-a setat");
     delay(1000);
@@ -482,6 +481,7 @@ void menuFunction(){
       break;
   }
 }
+
 void motionDetected(){
   if(state == 1 && option == 0){
     lcd.clear();
@@ -498,25 +498,23 @@ void motionDetected(){
     state = 0;
   }
 }
+
 void loop()
 { 
   if(nightLights){
     mx.control(MD_MAX72XX::INTENSITY, 1);  
-    digitalWrite(blueLedPin, 0);
-    digitalWrite(whiteLedPin, 0);
+    digitalWrite(BLUE_LED_PIN, 0);
+    digitalWrite(WHITE_LED_PIN, 0);
   }
   else{
     //if night lights was on previously turn one led
-    if(digitalRead(blueLedPin) == 0 && digitalRead(whiteLedPin) == 0 )
-      digitalWrite(blueLedPin, 1);
+    if(digitalRead(BLUE_LED_PIN) == 0 && digitalRead(WHITE_LED_PIN) == 0 )
+      digitalWrite(BLUE_LED_PIN, 1);
     LedFunctionClock();
     delay(500);
-    mx.control(MD_MAX72XX::INTENSITY, 10);
-    
-    
+    mx.control(MD_MAX72XX::INTENSITY, 10);    
   }
     
-
   if(!noSensors){
     motionDetected();
     getUltrasonicDistance();
